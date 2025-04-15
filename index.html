@@ -37,7 +37,7 @@
   <h2>Shipping Cost Calculator (China ➜ Jamaica)</h2>
 
   <label for="method">Shipping Method</label>
-  <select id="method" onchange="toggleFields()">
+  <select id="method" onchange="toggleInputs()">
     <option value="air">Air Freight</option>
     <option value="sea">Sea Freight</option>
   </select>
@@ -71,17 +71,26 @@
   <div class="results" id="output"></div>
 
   <script>
-    function toggleFields() {
+    // Function to toggle input fields based on shipping method selection
+    function toggleInputs() {
       const method = document.getElementById('method').value;
       const weightInput = document.getElementById('weight');
+      const volumeInput = document.getElementById('volume');
 
       if (method === 'sea') {
-        weightInput.value = '';
-        weightInput.disabled = true;
-      } else {
-        weightInput.disabled = false;
+        weightInput.disabled = true;  // Disable weight for sea freight
+        volumeInput.disabled = false; // Enable volume for sea freight
+      } else { // Air freight
+        weightInput.disabled = false; // Enable weight for air freight
+        volumeInput.disabled = true;  // Disable volume for air freight
       }
     }
+
+    // Ensure proper field state when page loads (Air Freight as default)
+    window.onload = function() {
+      document.getElementById('method').value = 'air';  // Set default to air freight
+      toggleInputs();  // Call toggleInputs to adjust fields accordingly
+    };
 
     function calculate() {
       const method = document.getElementById('method').value;
@@ -104,7 +113,7 @@
           return;
         }
         shippingCost = weight * 10;
-      } else {
+      } else { // sea freight
         if (isNaN(volume) || volume < 0.5) {
           document.getElementById('output').innerHTML = "Sea freight requires a minimum of 0.5 cbm.";
           return;
@@ -113,16 +122,12 @@
       }
 
       const total = shippingCost + customs;
-
       document.getElementById('output').innerHTML = `
         <p><strong>Shipping Cost:</strong> US$${shippingCost.toFixed(2)}</p>
         <p><strong>Customs (${customsRate}%):</strong> US$${customs.toFixed(2)}</p>
         <p><strong>Total Estimate:</strong> US$${total.toFixed(2)}</p>
       `;
     }
-
-    // Initialize on page load
-    window.onload = toggleFields;
   </script>
 </body>
 </html>
