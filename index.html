@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>China to Jamaica Shipping Calculator</title>
   <style>
     body {
@@ -38,19 +37,19 @@
   <h2>Shipping Cost Calculator (China ➜ Jamaica)</h2>
 
   <label for="method">Shipping Method</label>
-  <select id="method">
+  <select id="method" onchange="toggleFields()">
     <option value="air">Air Freight</option>
     <option value="sea">Sea Freight</option>
   </select>
 
   <label for="weight">Weight (lbs)</label>
-  <input type="number" id="weight" placeholder="Enter weight in lbs" />
+  <input type="number" id="weight" placeholder="Enter weight in lbs">
 
   <label for="volume">Volume (cbm)</label>
-  <input type="number" step="0.01" id="volume" placeholder="Enter volume in cbm" />
+  <input type="number" step="0.01" id="volume" placeholder="Enter volume in cbm">
 
   <label for="cost">Item Cost (USD)</label>
-  <input type="number" id="cost" placeholder="Enter item cost" />
+  <input type="number" id="cost" placeholder="Enter item cost">
 
   <label for="customs">Customs Percentage</label>
   <select id="customs">
@@ -72,6 +71,18 @@
   <div class="results" id="output"></div>
 
   <script>
+    function toggleFields() {
+      const method = document.getElementById('method').value;
+      const weightInput = document.getElementById('weight');
+
+      if (method === 'sea') {
+        weightInput.value = '';
+        weightInput.disabled = true;
+      } else {
+        weightInput.disabled = false;
+      }
+    }
+
     function calculate() {
       const method = document.getElementById('method').value;
       const weight = parseFloat(document.getElementById('weight').value);
@@ -109,6 +120,9 @@
         <p><strong>Total Estimate:</strong> US$${total.toFixed(2)}</p>
       `;
     }
+
+    // Initialize on page load
+    window.onload = toggleFields;
   </script>
 </body>
 </html>
